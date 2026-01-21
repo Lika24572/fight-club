@@ -1,0 +1,2339 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бойцовский клуб | О котором не принято говорить</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Roboto+Condensed:wght@300;400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+    <style>
+        :root {
+            --primary: #000000;
+            --secondary: #8b0000;
+            --accent: #daa520;
+            --light: #d3d3d3;
+            --dark: #0a0a0a;
+            --gray: #1a1a1a;
+            --gray-light: #333;
+            --blood: #8b0000;
+            --burn: #ff4500;
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            --shadow-hover: 0 20px 40px rgba(139, 0, 0, 0.5);
+            --glow: 0 0 20px rgba(139, 0, 0, 0.8);
+            --text-glow: 0 0 10px rgba(218, 165, 32, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background-color: var(--primary);
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--primary);
+            color: var(--light);
+            line-height: 1.7;
+            overflow-x: hidden;
+            position: relative;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(139, 0, 0, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(218, 165, 32, 0.1) 0%, transparent 20%);
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Warning overlay */
+        .warning-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.97);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+
+        .warning-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .warning-content {
+            background-color: var(--dark);
+            padding: 60px 40px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 800px;
+            border: 3px solid var(--blood);
+            box-shadow: 0 0 50px rgba(139, 0, 0, 0.8);
+            position: relative;
+            overflow: hidden;
+            margin: 20px;
+        }
+
+        .warning-content:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 30%, rgba(139, 0, 0, 0.1) 30%, rgba(139, 0, 0, 0.1) 70%, transparent 70%);
+        }
+
+        .warning-content h2 {
+            color: var(--blood);
+            font-size: 3rem;
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px rgba(139, 0, 0, 0.7);
+            position: relative;
+        }
+
+        .warning-content h2:after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--blood), transparent);
+        }
+
+        .warning-content p {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: var(--light);
+            font-family: 'Roboto Condensed', sans-serif;
+            line-height: 1.8;
+        }
+
+        .warning-content .highlight {
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.8rem;
+            text-shadow: var(--text-glow);
+        }
+
+        .enter-btn {
+            background-color: transparent;
+            color: var(--blood);
+            border: 2px solid var(--blood);
+            padding: 15px 50px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Oswald', sans-serif;
+            position: relative;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .enter-btn:hover {
+            background-color: var(--blood);
+            color: var(--dark);
+            box-shadow: 0 0 30px rgba(139, 0, 0, 0.7);
+            transform: scale(1.05);
+        }
+
+        .enter-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .enter-btn:hover:before {
+            left: 100%;
+        }
+
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 20px 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.7);
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(139, 0, 0, 0.3);
+        }
+
+        header.scrolled {
+            padding: 15px 0;
+            background-color: rgba(10, 10, 10, 0.98);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--light);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 5px 15px;
+            overflow: hidden;
+        }
+
+        .logo:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--blood), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .logo:hover:before {
+            transform: translateX(100%);
+        }
+
+        .logo i {
+            margin-right: 12px;
+            color: var(--accent);
+            text-shadow: 0 0 10px rgba(218, 165, 32, 0.5);
+        }
+
+        .logo-text {
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-text span {
+            color: var(--blood);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 30px;
+            position: relative;
+        }
+
+        nav ul li a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            transition: var(--transition);
+            position: relative;
+            padding: 5px 0;
+            font-family: 'Roboto Condensed', sans-serif;
+        }
+
+        nav ul li a:hover {
+            color: var(--accent);
+        }
+
+        nav ul li a:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--blood), var(--accent));
+            transition: var(--transition);
+            box-shadow: var(--glow);
+        }
+
+        nav ul li a:hover:after {
+            width: 100%;
+        }
+
+        /* Secret counter in nav */
+        .secret-counter {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--blood);
+            color: var(--dark);
+            font-size: 12px;
+            font-weight: bold;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0);
+            transition: var(--transition);
+        }
+
+        .secret-counter.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .mobile-toggle {
+            display: none;
+            font-size: 26px;
+            cursor: pointer;
+            color: var(--light);
+            transition: var(--transition);
+        }
+
+        .mobile-toggle:hover {
+            color: var(--accent);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            min-height: 600px;
+            background: 
+                linear-gradient(45deg, rgba(0, 0, 0, 0.95), rgba(10, 10, 10, 0.9)),
+                url('https://upload.wikimedia.org/wikipedia/ru/thumb/8/8a/Fight_club.jpg/800px-Fight_club.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent 30%, rgba(0, 0, 0, 0.95) 70%);
+        }
+
+        .hero-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            z-index: 2;
+            position: relative;
+            padding: 20px;
+            padding-top: 100px; /* Добавлен отступ сверху, чтобы текст не перекрывался хедером */
+        }
+
+        .hero-subtitle {
+            font-size: 1.8rem;
+            color: var(--blood);
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            font-family: 'Oswald', sans-serif;
+            animation: flicker 4s infinite alternate;
+            text-shadow: 0 0 10px rgba(139, 0, 0, 0.7);
+        }
+
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                opacity: 1;
+            }
+            20%, 24%, 55% {
+                opacity: 0.3;
+            }
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            margin-bottom: 25px;
+            color: var(--light);
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.8);
+            animation: fadeInDown 1s ease-out;
+            line-height: 1.1;
+        }
+
+        .hero h1 span {
+            color: var(--blood);
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero h1 span:after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background-color: rgba(139, 0, 0, 0.3);
+            z-index: -1;
+        }
+
+        .hero p {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            color: var(--accent);
+            animation: fadeInUp 1s ease-out 0.3s both;
+            font-family: 'Roboto Condensed', sans-serif;
+            font-weight: 300;
+        }
+
+        .hero-quote {
+            font-style: italic;
+            font-size: 1.4rem;
+            border-left: 4px solid var(--blood);
+            padding-left: 25px;
+            margin: 40px auto;
+            max-width: 800px;
+            animation: fadeIn 1.5s ease-out 0.6s both;
+            position: relative;
+            font-family: 'Roboto Condensed', sans-serif;
+            font-weight: 400;
+        }
+
+        .hero-quote:before {
+            content: '"';
+            font-size: 5rem;
+            color: var(--blood);
+            opacity: 0.3;
+            position: absolute;
+            top: -20px;
+            left: 10px;
+            font-family: serif;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--blood), #5a0000);
+            color: var(--light);
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Oswald', sans-serif;
+            animation: fadeIn 1s ease-out 0.9s both;
+            box-shadow: 0 5px 15px rgba(139, 0, 0, 0.4);
+            margin: 10px;
+        }
+
+        .btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(139, 0, 0, 0.6);
+            color: var(--light);
+        }
+
+        .btn:hover:before {
+            left: 100%;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--blood);
+            color: var(--blood);
+        }
+
+        .btn-secondary:hover {
+            background: var(--blood);
+            color: var(--light);
+        }
+
+        /* Sections */
+        section {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 3.2rem;
+            color: var(--light);
+            display: inline-block;
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--blood), transparent);
+        }
+
+        .section-title p {
+            max-width: 700px;
+            margin: 20px auto 0;
+            font-size: 1.2rem;
+            color: #aaa;
+        }
+
+        /* About Section */
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .about-text p {
+            margin-bottom: 25px;
+            font-size: 1.2rem;
+            text-align: justify;
+        }
+
+        .quote-block {
+            background-color: rgba(139, 0, 0, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 25px;
+            margin: 30px 0;
+            font-style: italic;
+            font-size: 1.3rem;
+            position: relative;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .quote-block:before {
+            content: '"';
+            font-size: 5rem;
+            color: var(--accent);
+            opacity: 0.2;
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            font-family: serif;
+        }
+
+        .about-image {
+            flex: 1;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            border: 1px solid var(--gray-light);
+        }
+
+        .about-image:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: var(--transition);
+        }
+
+        .about-image:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Characters Section */
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 40px;
+        }
+
+        .character-card {
+            background-color: var(--gray);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-light);
+            position: relative;
+        }
+
+        .character-card:hover {
+            transform: translateY(-20px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--blood);
+        }
+
+        .character-img {
+            height: 350px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .character-img:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 70%, rgba(10, 10, 10, 0.9) 100%);
+            z-index: 1;
+        }
+
+        .character-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .character-card:hover .character-img img {
+            transform: scale(1.1);
+        }
+
+        .character-info {
+            padding: 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .character-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .character-info h4 {
+            font-size: 1.3rem;
+            color: var(--blood);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .character-info p {
+            font-size: 1.1rem;
+            color: #ccc;
+        }
+
+        /* Philosophy Section */
+        .philosophy-content {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .philosophy-content:before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 100px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%238b0000"><path d="M9.983 3v7.391c0 5.704-3.731 9.57-8.983 10.609l-.995-2.151c2.432-.917 3.995-3.638 3.995-5.849h-4v-10h9.983zm14.017 0v7.391c0 5.704-3.748 9.571-9 10.609l-.996-2.151c2.433-.917 3.996-3.638 3.996-5.849h-3.983v-10h9.983z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.1;
+        }
+
+        .philosophy-content p {
+            font-size: 1.4rem;
+            margin-bottom: 40px;
+            line-height: 1.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .highlight {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 1.8rem;
+            position: relative;
+            display: inline-block;
+            padding: 0 10px;
+            font-family: 'Roboto Condensed', sans-serif;
+            text-shadow: var(--text-glow);
+        }
+
+        .highlight:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(139, 0, 0, 0.1);
+            z-index: -1;
+            transform: skewX(-15deg);
+        }
+
+        /* Video Section */
+        .video-section {
+            padding: 80px 0;
+            background-color: var(--dark);
+            position: relative;
+        }
+
+        .video-section:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 30%, rgba(139, 0, 0, 0.05) 30%, rgba(139, 0, 0, 0.05) 70%, transparent 70%);
+        }
+
+        .video-container {
+            max-width: 900px;
+            margin: 0 auto;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            position: relative;
+            z-index: 1;
+            aspect-ratio: 16/9;
+        }
+
+        .video-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* Easter Egg Section */
+        .easter-egg-section {
+            padding: 80px 0;
+            background-color: var(--dark);
+            position: relative;
+            border-top: 1px solid rgba(139, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(139, 0, 0, 0.3);
+        }
+
+        .easter-egg-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .easter-egg-title {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 40px;
+            text-shadow: var(--text-glow);
+            position: relative;
+        }
+
+        .easter-egg-title:after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .easter-egg-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .easter-egg-item {
+            background-color: rgba(26, 26, 26, 0.7);
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid rgba(139, 0, 0, 0.3);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .easter-egg-item:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .easter-egg-item:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(218, 165, 32, 0.1), transparent);
+            transition: 0.5s;
+        }
+
+        .easter-egg-item:hover:before {
+            left: 100%;
+        }
+
+        .easter-egg-item h4 {
+            color: var(--accent);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .easter-egg-item p {
+            color: #aaa;
+            font-size: 1.1rem;
+        }
+
+        .secret-message {
+            margin-top: 50px;
+            padding: 30px;
+            background-color: rgba(139, 0, 0, 0.1);
+            border-radius: 10px;
+            border: 1px dashed rgba(139, 0, 0, 0.5);
+            color: var(--accent);
+            font-size: 1.3rem;
+            font-family: 'Roboto Condensed', sans-serif;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+        }
+
+        .secret-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Gallery Section */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .gallery-item {
+            border-radius: 10px;
+            overflow: hidden;
+            height: 250px;
+            position: relative;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid var(--gray-light);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--blood);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 40%, rgba(139, 0, 0, 0.9) 100%);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+            padding: 20px;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-overlay i {
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        /* Contacts Section */
+        .contacts-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .contacts-info {
+            background-color: var(--gray);
+            padding: 50px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 700px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contacts-info:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--blood), var(--accent));
+        }
+
+        .contact-item {
+            margin-bottom: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 25px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            transition: var(--transition);
+        }
+
+        .contact-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            transform: translateX(10px);
+        }
+
+        .contact-item i {
+            font-size: 2rem;
+            color: var(--blood);
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(139, 0, 0, 0.1);
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .contact-item:hover i {
+            background-color: var(--blood);
+            color: var(--dark);
+            transform: scale(1.1);
+        }
+
+        .contact-item a {
+            color: var(--light);
+            text-decoration: none;
+            font-size: 1.4rem;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .contact-item a:hover {
+            color: var(--accent);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            padding: 70px 0 30px;
+            text-align: center;
+            border-top: 1px solid var(--gray-light);
+            position: relative;
+        }
+
+        footer:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--blood), var(--accent), var(--blood));
+        }
+
+        .footer-content {
+            margin-bottom: 40px;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background-color: var(--gray);
+            border-radius: 50%;
+            color: var(--light);
+            font-size: 1.8rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-icons a:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--blood), var(--accent));
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .social-icons a:hover:before {
+            opacity: 1;
+        }
+
+        .social-icons a i {
+            position: relative;
+            z-index: 1;
+        }
+
+        .social-icons a:hover {
+            transform: translateY(-10px) rotate(5deg);
+            box-shadow: 0 10px 20px rgba(139, 0, 0, 0.4);
+        }
+
+        .copyright {
+            padding-top: 40px;
+            border-top: 1px solid var(--gray);
+            font-size: 1rem;
+            color: #888;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .copyright a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .copyright a:hover {
+            color: var(--blood);
+            text-decoration: underline;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-70px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(70px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(139, 0, 0, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(139, 0, 0, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(139, 0, 0, 0);
+            }
+        }
+
+        /* Правила - ОТДЕЛЬНАЯ СТРАНИЦА */
+        .rules-section {
+            padding: 140px 0 100px;
+            min-height: 100vh;
+            background-color: var(--dark);
+        }
+
+        .rules-content {
+            background-color: var(--gray);
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            border: 3px solid var(--blood);
+            position: relative;
+            margin-top: 20px;
+        }
+
+        .rules-content h2 {
+            color: var(--blood);
+            font-size: 3rem;
+            margin-bottom: 40px;
+            text-align: center;
+            text-shadow: 0 0 15px rgba(139, 0, 0, 0.7);
+            position: relative;
+        }
+
+        .rules-content h2:after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--blood), transparent);
+        }
+
+        .rules-list {
+            list-style: none;
+            counter-reset: rule-counter;
+            margin-bottom: 40px;
+        }
+
+        .rules-list li {
+            margin-bottom: 25px;
+            font-size: 1.4rem;
+            padding-left: 60px;
+            position: relative;
+            counter-increment: rule-counter;
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        .rules-list li:before {
+            content: counter(rule-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 45px;
+            height: 45px;
+            background-color: var(--blood);
+            color: var(--dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.2rem;
+            box-shadow: 0 0 10px rgba(139, 0, 0, 0.5);
+        }
+
+        .back-to-home {
+            display: inline-block;
+            background: transparent;
+            color: var(--blood);
+            border: 2px solid var(--blood);
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: var(--transition);
+            font-family: 'Oswald', sans-serif;
+            margin-top: 30px;
+        }
+
+        .back-to-home:hover {
+            background-color: var(--blood);
+            color: var(--dark);
+            box-shadow: 0 0 20px rgba(139, 0, 0, 0.7);
+            transform: translateY(-3px);
+        }
+
+        /* Secret text */
+        .secret-text {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            color: rgba(139, 0, 0, 0.3);
+            font-size: 0.8rem;
+            font-family: monospace;
+            z-index: 999;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        /* Tyler's messages */
+        .tyler-message {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.9);
+            border: 1px solid var(--blood);
+            padding: 15px;
+            border-radius: 5px;
+            max-width: 300px;
+            font-size: 0.9rem;
+            color: var(--accent);
+            z-index: 999;
+            opacity: 0;
+            transform: translateY(100px);
+            transition: var(--transition);
+            font-family: 'Roboto Condensed', sans-serif;
+        }
+
+        .tyler-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .tyler-message:before {
+            content: 'Тайлер:';
+            display: block;
+            font-weight: bold;
+            color: var(--blood);
+            margin-bottom: 5px;
+        }
+
+        /* Media Queries - Улучшенная адаптивность */
+        @media (max-width: 1200px) {
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2.8rem;
+            }
+            
+            .characters-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 30px;
+            }
+            
+            .rules-content h2 {
+                font-size: 2.5rem;
+            }
+            
+            .rules-list li {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.5rem;
+                letter-spacing: 4px;
+            }
+            
+            .hero p {
+                font-size: 1.5rem;
+            }
+            
+            .hero-quote {
+                font-size: 1.2rem;
+                margin: 30px auto;
+            }
+            
+            .about-content {
+                flex-direction: column;
+                gap: 40px;
+            }
+            
+            .about-image {
+                order: -1;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            
+            .character-img {
+                height: 300px;
+            }
+            
+            .section-title h2 {
+                font-size: 2.5rem;
+            }
+            
+            .section-title p {
+                font-size: 1.1rem;
+                padding: 0 20px;
+            }
+            
+            .rules-content {
+                padding: 40px 30px;
+            }
+            
+            .rules-content h2 {
+                font-size: 2.2rem;
+            }
+            
+            .rules-list li {
+                font-size: 1.2rem;
+                padding-left: 50px;
+            }
+            
+            .rules-list li:before {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-toggle {
+                display: block;
+            }
+            
+            nav {
+                position: fixed;
+                top: 80px;
+                right: -100%;
+                width: 300px;
+                height: calc(100vh - 80px);
+                background-color: rgba(0, 0, 0, 0.98);
+                backdrop-filter: blur(10px);
+                transition: var(--transition);
+                padding-top: 60px;
+                border-left: 1px solid var(--gray-light);
+                z-index: 999;
+            }
+            
+            nav.active {
+                right: 0;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav ul li {
+                margin: 15px 0;
+                width: 80%;
+                text-align: center;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+                letter-spacing: 3px;
+                margin-bottom: 20px;
+            }
+            
+            .hero p {
+                font-size: 1.3rem;
+                margin-bottom: 20px;
+            }
+            
+            .hero-quote {
+                font-size: 1.1rem;
+                padding-left: 20px;
+                margin: 25px auto;
+            }
+            
+            .btn {
+                padding: 12px 30px;
+                font-size: 1rem;
+                margin: 5px;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+                padding-bottom: 15px;
+            }
+            
+            .section-title h2:after {
+                width: 100px;
+            }
+            
+            .section-title p {
+                font-size: 1rem;
+                margin-top: 15px;
+            }
+            
+            section {
+                padding: 80px 0;
+            }
+            
+            .character-info {
+                padding: 20px;
+            }
+            
+            .character-info h3 {
+                font-size: 1.5rem;
+            }
+            
+            .character-info h4 {
+                font-size: 1.1rem;
+            }
+            
+            .character-info p {
+                font-size: 1rem;
+            }
+            
+            .contact-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            .contact-item a {
+                font-size: 1.2rem;
+            }
+            
+            .warning-content h2 {
+                font-size: 2.2rem;
+            }
+            
+            .warning-content p {
+                font-size: 1.2rem;
+                padding: 0 10px;
+            }
+            
+            .warning-content {
+                padding: 40px 20px;
+                margin: 0 20px;
+            }
+            
+            .enter-btn {
+                padding: 12px 30px;
+                font-size: 1.1rem;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 15px;
+            }
+            
+            .gallery-item {
+                height: 200px;
+            }
+            
+            .philosophy-content p {
+                font-size: 1.2rem;
+                padding: 0 10px;
+            }
+            
+            .highlight {
+                font-size: 1.4rem;
+            }
+            
+            .quote-block {
+                padding: 20px;
+                font-size: 1.1rem;
+                margin: 20px 0;
+            }
+            
+            .contacts-info {
+                padding: 30px 20px;
+            }
+            
+            .footer-content p {
+                padding: 0 10px;
+            }
+            
+            .rules-section {
+                padding: 120px 0 80px;
+            }
+            
+            .rules-content {
+                padding: 30px 20px;
+            }
+            
+            .rules-content h2 {
+                font-size: 1.8rem;
+                margin-bottom: 30px;
+            }
+            
+            .rules-list li {
+                font-size: 1.1rem;
+                padding-left: 45px;
+                margin-bottom: 20px;
+            }
+            
+            .rules-list li:before {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero {
+                min-height: 500px;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+                letter-spacing: 2px;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .hero-quote {
+                font-size: 1rem;
+                padding-left: 15px;
+                margin: 20px auto;
+            }
+            
+            .btn {
+                padding: 10px 25px;
+                font-size: 0.9rem;
+                display: block;
+                margin: 10px auto;
+                width: 80%;
+                max-width: 250px;
+            }
+            
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+            
+            .characters-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .character-card {
+                margin-bottom: 20px;
+            }
+            
+            .character-img {
+                height: 250px;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .gallery-item {
+                height: 200px;
+            }
+            
+            .easter-egg-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .rules-section {
+                padding: 110px 0 60px;
+            }
+            
+            .rules-content {
+                padding: 25px 15px;
+            }
+            
+            .rules-content h2 {
+                font-size: 1.6rem;
+                margin-bottom: 25px;
+            }
+            
+            .rules-list li {
+                font-size: 1rem;
+                padding-left: 40px;
+                margin-bottom: 15px;
+            }
+            
+            .rules-list li:before {
+                width: 30px;
+                height: 30px;
+                font-size: 0.9rem;
+            }
+            
+            .copyright {
+                font-size: 0.9rem;
+                padding: 20px 10px 0;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 0.9rem;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.6rem;
+            }
+            
+            .btn {
+                width: 90%;
+            }
+            
+            .warning-content h2 {
+                font-size: 1.8rem;
+            }
+            
+            .warning-content p {
+                font-size: 1rem;
+            }
+            
+            .rules-content h2 {
+                font-size: 1.4rem;
+            }
+            
+            .rules-list li {
+                font-size: 0.95rem;
+                padding-left: 35px;
+            }
+            
+            .rules-list li:before {
+                width: 28px;
+                height: 28px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Улучшения для мобильных устройств */
+        .character-img img, .gallery-item img, .about-image img {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Улучшение читаемости текста на маленьких экранах */
+        @media (max-width: 768px) {
+            p, li, .quote-block, .character-info p {
+                line-height: 1.6;
+            }
+            
+            .container {
+                padding: 0 15px;
+            }
+        }
+
+        /* Фикс для кнопок на мобильных */
+        @media (max-width: 768px) {
+            .btn {
+                min-height: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Warning overlay -->
+    <div class="warning-overlay" id="warningOverlay">
+        <div class="warning-content">
+            <h2>ВНИМАНИЕ</h2>
+            <p>Вы собираетесь войти в пространство, <span class="highlight">о котором не принято говорить</span>.</p>
+            <p>Здесь нарушаются правила. Здесь стираются границы. Здесь вы увидите то, что хотели скрыть от самих себя.</p>
+            <p><span class="highlight">Первое правило Бойцовского клуба:</span> никому не рассказывать о Бойцовском клубе.</p>
+            <p><span class="highlight">Второе правило Бойцовского клуба:</span> никому никогда не рассказывать о Бойцовском клубе.</p>
+            <button class="enter-btn" id="enterBtn">ВОЙТИ НА САЙТ</button>
+            <p style="margin-top: 30px; font-size: 1rem; color: #666;">Если ты здесь — значит, правила больше не работают</p>
+        </div>
+    </div>
+
+    <!-- Secret text -->
+    <div class="secret-text" id="secretText">space monkeys</div>
+
+    <!-- Tyler's messages -->
+    <div class="tyler-message" id="tylerMessage"></div>
+
+    <!-- Header -->
+    <header id="header" style="display: none;">
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">
+                    <i class="fas fa-fist-raised"></i>
+                    <div class="logo-text">Бойцовский <span>клуб</span></div>
+                </a>
+                
+                <div class="mobile-toggle" id="mobileToggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+                
+                <nav id="mainNav">
+                    <ul>
+                        <li><a href="#home">Главная</a></li>
+                        <li><a href="#about">О фильме</a></li>
+                        <li><a href="#characters">Персонажи</a></li>
+                        <li><a href="#philosophy">Философия</a></li>
+                        <li><a href="#video">Видео</a></li>
+                        <li><a href="#easter">Пасхалки</a></li>
+                        <li><a href="#gallery">Галерея</a></li>
+                        <li><a href="#contacts">Контакты</a></li>
+                        <li><a href="#rules">Правила <span class="secret-counter" id="secretCounter">0</span></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home" style="display: none;">
+        <div class="container">
+            <div class="hero-content">
+                <p class="hero-subtitle">Фильм, о котором не принято говорить</p>
+                <h1>Бойцовский <span>клуб</span></h1>
+                <p>Если ты здесь — значит, правила больше не работают</p>
+                <div class="hero-quote" id="heroQuote">
+                    "Скоро тебя будут называть сэр, а твоя жена будет трахаться с парнем с водолазкой. Ты — не твоя работа. Ты — не то, сколько у тебя денег в банке. Ты — не машина, на которой ты ездишь. Ты — не содержимое твоего кошелька. Ты — не твои штаны. Ты — это поющая, танцующая штука на этом мире."
+                </div>
+                <div>
+                    <a href="#about" class="btn">Исследовать фильм</a>
+                    <a href="#video" class="btn btn-secondary">Смотреть трейлер</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" style="display: none;">
+        <div class="container">
+            <div class="section-title">
+                <h2>О фильме</h2>
+                <p>Культовая драма, изменившая сознание целого поколения</p>
+            </div>
+            
+            <div class="about-content">
+                <div class="about-text">
+                    <p><strong>"Бойцовский клуб" (1999)</strong> — это культовая драма режиссера Дэвида Финчера, снятая по одноименному роману Чака Паланика. Фильм стал не просто киноработой, а социальным феноменом, который отразил разочарование поколения в потребительской культуре и поиск смысла за пределами материальных ценностей.</p>
+                    
+                    <div class="quote-block" id="quote1">
+                        "Вы — не ваша работа. Вы — не сумма денег на вашем банковском счету. Вы — не машина, которую вы водите. Вы — не содержимое вашего кошелька."
+                    </div>
+                    
+                    <p>Главный герой, безымянный рассказчик (Эдвард Нортон), страдает от бессонницы и экзистенциального кризиса. Его жизнь меняется, когда он встречает загадочного Тайлера Дёрдена (Брэд Питт) — харизматичного анархиста, который становится его alter ego и вдохновителем для создания подпольного "Бойцовского клуба".</p>
+                    
+                    <div class="quote-block" id="quote2">
+                        "Мы — поколение, выросшее на телевидении, верящее, что однажды мы станем миллионерами, кинозвездами, рок-богами. Но мы не стали. И мы только начинаем это понимать. И нас это бесит."
+                    </div>
+                    
+                    <p>Фильм мастерски исследует темы идентичности, свободы, мужского кризиса и бунта против системы. Стилистика Финчера, нелинейный сюжет и мощные визуальные метафоры делают "Бойцовский клуб" одним из самых влиятельных фильмов конца XX века.</p>
+                </div>
+                <div class="about-image">
+                    <img src="https://blog.okko.tv/thumb/1600x0/filters:quality(75):no_upscale()/imgs/2025/03/24/12/6766333/60d77e6fe2d1ff8a7337b128c5b3494e924ecd50.jpg" alt="Тайлер Дёрден и Рассказчик" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Characters Section -->
+    <section id="characters" style="background-color: var(--dark); display: none;">
+        <div class="container">
+            <div class="section-title">
+                <h2>Персонажи и актеры</h2>
+                <p>Легендарные герои и блистательные актерские работы</p>
+            </div>
+            
+            <div class="characters-grid">
+                <div class="character-card" id="tylerCard">
+                    <div class="character-img">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Brad_Pitt_June_2014_%28cropped%29.jpg/800px-Brad_Pitt_June_2014_%28cropped%29.jpg" alt="Тайлер Дерден" loading="lazy">
+                    </div>
+                    <div class="character-info">
+                        <h3>Тайлер Дёрден</h3>
+                        <h4>Брэд Питт</h4>
+                        <p>Загадочный, харизматичный мыловар и анархист. Создатель "Бойцовского клуба" и проекта "Разгром". Олицетворяет свободу, разрушение и протест против потребительской культуры.</p>
+                        <p style="margin-top: 15px; font-size: 0.9rem; color: var(--accent);"><em>"Реклама заставляет нас гнаться за машинами и одеждой, работать на работах, которые мы ненавидим, чтобы кустить дерьмо, которое нам не нужно."</em></p>
+                    </div>
+                </div>
+                
+                <div class="character-card" id="narratorCard">
+                    <div class="character-img">
+                        <img src="https://blog.okko.tv/thumb/1720x0/filters:quality(75):no_upscale()/imgs/2025/03/24/13/6766422/f15af5e15f16caeebd0994e12dcc6080457a9229.jpg" alt="Рассказчик" loading="lazy">
+                    </div>
+                    <div class="character-info">
+                        <h3>Рассказчик</h3>
+                        <h4>Эдвард Нортон</h4>
+                        <p>Безымянный главный герой, страдающий от бессонницы и экзистенциального кризиса. Работает экспертом по страховым случаям. Его встреча с Тайлером меняет всю жизнь.</p>
+                        <p style="margin-top: 15px; font-size: 0.9rem; color: var(--accent);"><em>"Всё, что ты когда-либо захочешь в этой жизни, находится по ту сторону страха."</em></p>
+                    </div>
+                </div>
+                
+                <div class="character-card" id="marlaCard">
+                    <div class="character-img">
+                        <img src="https://upload.wikimedia.org/wikipedia/ru/thumb/c/c8/Marla_club.jpg/800px-Marla_club.jpg" alt="Марла Сингер" loading="lazy">
+                    </div>
+                    <div class="character-info">
+                        <h3>Марла Сингер</h3>
+                        <h4>Хелена Бонэм Картер</h4>
+                        <p>Циничная, эмоционально нестабильная женщина, которая посещает группы поддержки для больных раком, хотя не больна. Её отношения с Рассказчиком и Тайлером сложны и противоречивы.</p>
+                        <p style="margin-top: 15px; font-size: 0.9rem; color: var(--accent);"><em>"Я хочу, чтобы у меня был свой рак. Я заслуживаю его больше, чем эти тупицы."</em></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Philosophy Section -->
+    <section id="philosophy" style="display: none;">
+        <div class="container">
+            <div class="section-title">
+                <h2>Философия фильма</h2>
+                <p>Глубокие идеи, изменившие мировоззрение миллионов</p>
+            </div>
+            
+            <div class="philosophy-content">
+                <p>Основная идея "Бойцовского клуба" — критика потребительской культуры и поиск подлинной идентичности в мире, где люди определяются тем, что они покупают, а не тем, кто они есть на самом деле.</p>
+                
+                <div class="quote-block" style="margin: 30px auto; max-width: 800px;">
+                    "Мы — средние дети истории. Ни цели, ни места. У нас нет Великой депрессии. Нет Великой войны. Наша война — духовная война. Наша депрессия — это наша жизнь."
+                </div>
+                
+                <p>Фильм поднимает важные вопросы: что делает нас людьми? Как найти смысл в мире, который предлагает готовые шаблоны успеха? Как освободиться от социальных масок и ожиданий?</p>
+                
+                <p class="highlight">"Только потеряв всё, мы обретаем свободу делать что угодно" — эта ключевая фраза Тайлера Дёрдена отражает главную мысль фильма: истинная свобода начинается тогда, когда мы перестаем цепляться за материальные ценности и социальные статусы.</p>
+                
+                <div class="quote-block" style="margin: 30px auto; max-width: 800px;">
+                    "Ты — не особенный. Ты — не прекрасная и уникальная снежинка. Ты — такое же разлагающееся органическое вещество, как и все. Мы все — часть одного великого компоста."
+                </div>
+                
+                <p>Фильм также исследует тему двойственности человеческой природы, показывая, как в одном человеке могут уживаться конформист и бунтарь, созидатель и разрушитель.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Section -->
+    <section class="video-section" id="video" style="display: none;">
+        <div class="container">
+            <div class="section-title">
+                <h2>Видео</h2>
+                <p>Легендарные сцены и трейлер культового фильма</p>
+            </div>
+            
+            <div class="video-container">
+                <iframe 
+                    src="https://vk.com/video_ext.php?oid=-227372945&id=456239026&hash=9f9e3c7e6b5c8a2f"
+                    allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+                    frameborder="0"
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Easter Egg Section -->
+    <section class="easter-egg-section" id="easter" style="display: none;">
+        <div class="container">
+            <div class="section-title">
+                <h2>Пасхалки и секреты</h2>
+                <p>Найди все скрытые элементы, чтобы понять истинный смысл</p>
+            </div>
+            
+            <div class="easter-egg-content">
+                <h3 class="easter-egg-title">Секреты Бойцовского клуба</h3>
+                <p>Фильм полен скрытых смыслов, деталей и пасхалок. Некоторые из них раскрывают сюжетные повороты, другие — философские идеи. Попробуй найти все секреты на этом сайте.</p>
+                
+                <div class="easter-egg-grid">
+                    <div class="easter-egg-item" id="easter1">
+                        <h4>Кадры с Тайлером</h4>
+                        <p>В первых 15 минутах фильма Тайлер появляется в кадре на долю секунды перед тем, как его официально представят.</p>
+                    </div>
+                    
+                    <div class="easter-egg-item" id="easter2">
+                        <h4>Мыло</h4>
+                        <p>Мыло, которое делает Тайлер, изготавливается из человеческого жира, который он добывает в клинике липосакции.</p>
+                    </div>
+                    
+                    <div class="easter-egg-item" id="easter3">
+                        <h4>Красная лампочка</h4>
+                        <p>В сцене, где Тайлер показывает Рассказчику дом на Пейпер-стрит, на лестнице мигает красная лампочка — символ опасности.</p>
+                    </div>
+                    
+                    <div class="easter-egg-item" id="easter4">
+                        <h4>Двойная экспозиция</h4>
+                        <p>В сцене, где Рассказчик говорит с боссом, в окне за его спиной на долю секунды появляется лицо Тайлера.</p>
+                    </div>
+                </div>
+                
+                <div class="secret-message" id="secretMessage">
+                    <p><strong>Ты нашел все пасхалки!</strong> Теперь ты знаешь истину: Тайлер Дёрден и Рассказчик — один и тот же человек. "Бойцовский клуб" — это история о расколе личности, о борьбе с самим собой.</p>
+                    <p style="margin-top: 15px;"><em>"Вы всю жизнь смотрите телевизор и думаете: костюмы не моего размера, у меня никогда не будет таких друзей, такой работы, такой жизни. Да забудь про это, чувак! Ты и так в дерьме!"</em></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" style="background-color: var(--dark); display: none;">
+        <div class="container">
+            <div class="section-title">
+                <h2>Галерея</h2>
+                <p>Захватывающие кадры из культового фильма</p>
+            </div>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="https://www.soyuz.ru/public/uploads/files/3/7478658/20220207162800c2dc835dda.jpg" alt="Бойцовский клуб - мероприятия" loading="lazy">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+                
+                <div class="gallery-item">
+                    <img src="https://blog.okko.tv/thumb/1600x0/filters:quality(75):no_upscale()/imgs/2025/03/24/12/6766333/60d77e6fe2d1ff8a7337b128c5b3494e924ecd50.jpg" alt="Тайлер и Рассказчик" loading="lazy">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+                
+                <div class="gallery-item">
+                    <img src="https://upload.wikimedia.org/wikipedia/ru/thumb/c/c8/Marla_club.jpg/800px-Marla_club.jpg" alt="Тайлер и Марла" loading="lazy">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+                
+                <div class="gallery-item">
+                    <img src="https://upload.wikimedia.org/wikipedia/ru/thumb/8/8a/Fight_club.jpg/800px-Fight_club.jpg" alt="Постер фильма" loading="lazy">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacts Section -->
+    <section id="contacts" style="display: none;">
+        <div class="container">
+            <div class="section-title">
+                <h2>Контакты</h2>
+                <p>Свяжитесь со мной для обсуждения фильма и его философии</p>
+            </div>
+            
+            <div class="contacts-content">
+                <div class="contacts-info">
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <a href="tel:+79228922947">+7 (922) 892-29-47</a>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:likaorenburg@gmail.com">likaorenburg@gmail.com</a>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i class="fab fa-telegram"></i>
+                        <a href="https://t.me/likallk" target="_blank">@likallk в Telegram</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Правила - ОТДЕЛЬНАЯ СТРАНИЦА -->
+    <section class="rules-section" id="rules" style="display: none;">
+        <div class="container">
+            <div class="section-title">
+                <h2>Правила Бойцовского клуба</h2>
+                <p>Строгие законы, которые нельзя нарушать... или можно?</p>
+            </div>
+            
+            <div class="rules-content">
+                <h2>Официальные правила</h2>
+                <ul class="rules-list">
+                    <li>Первое правило Бойцовского клуба: никому не рассказывать о Бойцовском клубе.</li>
+                    <li>Второе правило Бойцовского клуба: никому никогда не рассказывать о Бойцовском клубе.</li>
+                    <li>Третье правило Бойцовского клуба: в схватке участвуют только двое.</li>
+                    <li>Четвертое правило Бойцовского клуба: не более одного поединка за раз.</li>
+                    <li>Пятое правило Бойцовского клуба: бойцы сражаются без обуви и без рубашек.</li>
+                    <li>Шестое правило Бойцовского клуба: поединок продолжается столько, сколько потребуется.</li>
+                    <li>Седьмое правило Бойцовского клуба: если это твой первый бой в клубе - ты должен биться.</li>
+                    <li><span class="highlight" style="font-size: 1.4rem;">Восьмое правило (секретное): если это твой первый раз в клубе — ты должен найти все пасхалки на этом сайте.</span></li>
+                </ul>
+                <p class="highlight" id="foundSecrets" style="font-size: 1.5rem; text-align: center; margin-top: 30px;">Найдено пасхалок: 0/7</p>
+                <div style="text-align: center; margin-top: 40px;">
+                    <a href="#home" class="back-to-home">Вернуться на главную</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="display: none;">
+        <div class="container">
+            <div class="footer-content">
+                <a href="#" class="logo" style="justify-content: center; margin-bottom: 20px;">
+                    <i class="fas fa-fist-raised"></i>
+                    <div class="logo-text">Бойцовский <span>клуб</span></div>
+                </a>
+                <p style="max-width: 700px; margin: 0 auto; color: var(--blood); font-weight: bold;">Если ты здесь — значит, правила больше не работают</p>
+                <p style="max-width: 700px; margin: 10px auto;">Фильм, который заставляет думать. Фильм, который меняет сознание.</p>
+                
+                <div class="social-icons">
+                    <a href="https://t.me/likallk" target="_blank"><i class="fab fa-telegram"></i></a>
+                    <a href="mailto:likaorenburg@gmail.com"><i class="fas fa-envelope"></i></a>
+                    <a href="tel:+79228922947"><i class="fas fa-phone"></i></a>
+                    <a href="#"><i class="fab fa-vk"></i></a>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2023 Бойцовский клуб. Сайт создан для фанатов культового фильма. <strong>Первое правило Бойцовского клуба:</strong> никому не рассказывать о Бойцовском клубе.</p>
+                <p>Все изображения и видео используются в ознакомительных целях. Все права принадлежат их правообладателям.</p>
+                <p style="margin-top: 20px; color: var(--blood); font-size: 0.9rem;"><em>Последнее сообщение от Тайлера: "Мы не хотим, чтобы ты покупал машину, которую мы рекламируем. Мы хотим, чтобы ты ненавидел свою машину."</em></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Warning overlay
+        const warningOverlay = document.getElementById('warningOverlay');
+        const enterBtn = document.getElementById('enterBtn');
+        const secretText = document.getElementById('secretText');
+        const tylerMessage = document.getElementById('tylerMessage');
+        
+        // Easter egg tracking
+        let foundSecrets = 0;
+        const totalSecrets = 7;
+        const secretCounter = document.getElementById('secretCounter');
+        const foundSecretsText = document.getElementById('foundSecrets');
+        const secretMessage = document.getElementById('secretMessage');
+        
+        // Show Tyler message
+        function showTylerMessage(text, duration = 5000) {
+            tylerMessage.textContent = text;
+            tylerMessage.classList.add('show');
+            
+            setTimeout(() => {
+                tylerMessage.classList.remove('show');
+            }, duration);
+        }
+        
+        // Update secret counter
+        function updateSecretCounter() {
+            secretCounter.textContent = foundSecrets;
+            if (foundSecretsText) {
+                foundSecretsText.textContent = `Найдено пасхалок: ${foundSecrets}/${totalSecrets}`;
+            }
+            
+            if (foundSecrets > 0) {
+                secretCounter.classList.add('active');
+            }
+            
+            if (foundSecrets === totalSecrets) {
+                if (secretMessage) secretMessage.classList.add('show');
+                showTylerMessage("Поздравляю! Ты нашел все пасхалки. Теперь ты знаешь правду. Мы все — один и тот же человек.", 8000);
+            }
+        }
+        
+        // Enter the website
+        enterBtn.addEventListener('click', function() {
+            warningOverlay.classList.add('hidden');
+            
+            // Show all sections
+            document.getElementById('header').style.display = 'block';
+            document.getElementById('home').style.display = 'block';
+            document.getElementById('about').style.display = 'block';
+            document.getElementById('characters').style.display = 'block';
+            document.getElementById('philosophy').style.display = 'block';
+            document.getElementById('video').style.display = 'block';
+            document.getElementById('easter').style.display = 'block';
+            document.getElementById('gallery').style.display = 'block';
+            document.getElementById('contacts').style.display = 'block';
+            document.getElementById('rules').style.display = 'block';
+            document.querySelector('footer').style.display = 'block';
+            
+            // First Tyler message
+            setTimeout(() => {
+                showTylerMessage("Добро пожаловать. Правила больше не работают. Ты нарушил первое и второе правило просто тем, что зашел сюда.");
+            }, 1000);
+            
+            // Found first secret (entering the site)
+            foundSecrets = 1;
+            updateSecretCounter();
+        });
+        
+        // Mobile Navigation Toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const mainNav = document.getElementById('mainNav');
+        
+        mobileToggle.addEventListener('click', function() {
+            mainNav.classList.toggle('active');
+            this.querySelector('i').classList.toggle('fa-bars');
+            this.querySelector('i').classList.toggle('fa-times');
+        });
+        
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('#mainNav a').forEach(link => {
+            link.addEventListener('click', () => {
+                mainNav.classList.remove('active');
+                mobileToggle.querySelector('i').classList.add('fa-bars');
+                mobileToggle.querySelector('i').classList.remove('fa-times');
+            });
+        });
+        
+        // Header scroll effect
+        const header = document.getElementById('header');
+        
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                // Если это ссылка на правила, просто прокручиваем
+                if (this.getAttribute('href') === '#rules') {
+                    e.preventDefault();
+                    
+                    const targetElement = document.getElementById('rules');
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 100,
+                            behavior: 'smooth'
+                        });
+                        
+                        // Found secret (clicking rules link)
+                        if (foundSecrets < 2) {
+                            foundSecrets = 2;
+                            updateSecretCounter();
+                            showTylerMessage("Ты читаешь правила? Ирония. Мы создали клуб, чтобы нарушать правила.");
+                        }
+                    }
+                    return;
+                }
+                
+                // Для остальных ссылок
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Easter egg interactions
+        // Secret text click
+        secretText.addEventListener('click', function() {
+            if (foundSecrets < 3) {
+                foundSecrets = 3;
+                updateSecretCounter();
+                showTylerMessage("Space monkeys... Проект 'Разгром' начинается. Ты нашел первую пасхалку.");
+                
+                // Change text
+                secretText.textContent = "project mayhem";
+                secretText.style.color = "rgba(218, 165, 32, 0.5)";
+            }
+        });
+        
+        // Character cards click
+        document.getElementById('tylerCard').addEventListener('click', function() {
+            if (foundSecrets < 4) {
+                foundSecrets = 4;
+                updateSecretCounter();
+                showTylerMessage("Я смотрю на тебя. Ты смотришь на меня. Но мы один и тот же человек.");
+            }
+        });
+        
+        document.getElementById('narratorCard').addEventListener('click', function() {
+            if (foundSecrets < 5) {
+                foundSecrets = 5;
+                updateSecretCounter();
+                showTylerMessage("Я знаю, потому что ты знаешь. Мы знаем.");
+            }
+        });
+        
+        // Quote blocks click
+        document.getElementById('quote1').addEventListener('click', function() {
+            if (foundSecrets < 6) {
+                foundSecrets = 6;
+                updateSecretCounter();
+                showTylerMessage("Ты начинаешь понимать. Мы — не то, что мы покупаем. Мы — не наша работа.");
+            }
+        });
+        
+        // Easter egg items
+        document.getElementById('easter1').addEventListener('click', function() {
+            if (foundSecrets < 7) {
+                foundSecrets = 7;
+                updateSecretCounter();
+                showTylerMessage("Финальная пасхалка! Тайлер был там с самого начала. Потому что он часть тебя.");
+            }
+        });
+        
+        // Typewriter effect for hero quote
+        const heroQuote = document.getElementById('heroQuote');
+        const originalText = heroQuote.textContent;
+        heroQuote.textContent = '';
+        
+        let i = 0;
+        const typeWriter = () => {
+            if (i < originalText.length) {
+                heroQuote.textContent += originalText.charAt(i);
+                i++;
+                setTimeout(typeWriter, 30);
+            }
+        };
+        
+        // Start typewriter effect after page loads
+        setTimeout(typeWriter, 1500);
+        
+        // Random Tyler messages
+        const tylerQuotes = [
+            "Ты — не твоя работа. Ты — не сумма денег на твоем банковском счету.",
+            "Только потеряв всё, мы обретаем свободу делать что угодно.",
+            "Реклама заставляет нас гнаться за машинами и одеждой.",
+            "Мы — поколение, выросшее на телевидении.",
+            "Ты — не особенный. Ты — не прекрасная и уникальная снежинка.",
+            "Скоро тебя будут называть сэр, а твоя жена будет трахаться с парнем с водолазкой.",
+            "Всё, что ты когда-либо захочешь в этой жизни, находится по ту сторону страха."
+        ];
+        
+        // Show random Tyler message every 30 seconds
+        setInterval(() => {
+            if (Math.random() > 0.7 && !tylerMessage.classList.contains('show')) {
+                const randomQuote = tylerQuotes[Math.floor(Math.random() * tylerQuotes.length)];
+                showTylerMessage(randomQuote, 4000);
+            }
+        }, 30000);
+        
+        // Add pulse animation to buttons on hover
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                this.style.animation = 'pulse 1.5s infinite';
+            });
+            
+            btn.addEventListener('mouseleave', function() {
+                this.style.animation = '';
+            });
+        });
+        
+        // Hidden message in console
+        console.log("%cЕсли ты читаешь это — ты нарушил правила.", "color: #8b0000; font-size: 20px; font-weight: bold;");
+        console.log("%cБойцовский клуб — это не просто фильм. Это диагноз поколения.", "color: #daa520; font-size: 16px;");
+        console.log("%cТайлер был прав: 'Ты — не твоя работа.'", "color: #8b0000; font-size: 14px;");
+        
+        // Fix for mobile touch events
+        document.addEventListener('touchstart', function() {}, {passive: true});
+        
+        // Fix for header overlapping content
+        function adjustHeroPadding() {
+            const header = document.getElementById('header');
+            const heroContent = document.querySelector('.hero-content');
+            
+            if (header && heroContent) {
+                const headerHeight = header.offsetHeight;
+                heroContent.style.paddingTop = (headerHeight + 40) + 'px';
+            }
+        }
+        
+        // Adjust padding when page loads and on resize
+        window.addEventListener('load', adjustHeroPadding);
+        window.addEventListener('resize', adjustHeroPadding);
+        
+        // Initial adjustment
+        setTimeout(adjustHeroPadding, 500);
+    </script>
+</body>
+</html>
